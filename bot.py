@@ -46,29 +46,23 @@ async def handle_message(update: Update, context):
     message_text = update.message.text if update.message.text else None
 
     if update.message.photo:
-        # Get the largest size photo (last in the list)
         photo = update.message.photo[-1]
         file_id = photo.file_id
         file = await context.bot.get_file(file_id)
         
-        # Ensure the image directory exists
         image_dir = '/app/images/'
         os.makedirs(image_dir, exist_ok=True)
         
         file_path = f'{image_dir}{file_id}.jpg'
         
-        # Download the photo and save it to the filesystem
         await file.download_to_drive(file_path)
         
-        # Store file information in the database
         store_message(chat_id, file_id=file_id, file_path=file_path)
         response_message = await update.message.reply_text("Picture received! It will disappear soon.")
     else:
-        # Store text message
         store_message(chat_id, message=message_text)
         response_message = await update.message.reply_text("Message received! It will disappear soon.")
 
-    # Log message IDs for debugging
     logger.info(f"Your Message ID: {update.message.message_id}, Bot Response ID: {response_message.message_id}")
 
     # Delay for 10 seconds before deleting
@@ -76,8 +70,8 @@ async def handle_message(update: Update, context):
 
     # Delete the user's message and bot's response
     try:
-        await context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)  # User message
-        await context.bot.delete_message(chat_id=chat_id, message_id=response_message.message_id)  # Bot response
+        await context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+        await context.bot.delete_message(chat_id=chat_id, message_id=response_message.message_id)
         logger.info("Deleted messages successfully.")
     except Exception as e:
         logger.error(f"Failed to delete messages: {e}")
@@ -97,7 +91,7 @@ async def start(update: Update, context):
     await send_welcome_message(update.message.chat_id, context)
 
 if __name__ == '__main__':
-    init_db()  # Initialize the database
+    init_db()
 
     # Initialize the bot application with timeouts for requests
     app = ApplicationBuilder().token(os.getenv('TELEGRAM_BOT_TOKEN')).connect_timeout(10).read_timeout(20).build()
