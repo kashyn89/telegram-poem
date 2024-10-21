@@ -10,6 +10,7 @@ You can view it all on a password protected website and even download it.
 Selfhosting thing so you handle your own data!
 
 Runs in docker.
+You only need a bot token from botfather, invite the bot into a group chat and lets go.
 
 ```
 version: '3'
