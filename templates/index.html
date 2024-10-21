@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stored Messages</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+        }
+        a {
+            color: #bb86fc;
+        }
+        .message {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .message img {
+            max-width: 300px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Messages</h1>
+    <a href="{{ url_for('download_pdf') }}">Download Chat History as PDF</a>
+    <ul>
+        {% for message in messages %}
+        <li class="message">
+            <strong>Chat ID:</strong> {{ message[1] }} <br>
+            <strong>Message:</strong> {{ message[2] or 'No text' }} <br>
+            <strong>Timestamp:</strong> {{ message[4] }} <br>
+            {% if message[3] %}
+            <img src="{{ url_for('serve_image', filename=message[3].split('/')[-1]) }}" alt="Image">
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

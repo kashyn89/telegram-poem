@@ -1,0 +1,19 @@
+version: '3'
+services:
+  telegram-bot:
+    build: .
+    volumes:
+      - data:/app/db
+      - images:/app/images
+    ports:
+      - "5011:5000"
+    environment:
+      - TELEGRAM_BOT_TOKEN=set_your_bot_token
+      - WEB_PASSWORD=set_webpassword
+    restart: always
+networks:
+  default:
+    driver: bridge
+volumes:
+  data:
+  images:
